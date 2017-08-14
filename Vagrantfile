@@ -53,7 +53,7 @@ Vagrant.configure(2) do |config|
       # vb.gui = true
 
       # Customize the amount of memory on the VM:
-      vb.memory = "4096"
+      vb.memory = "8192"
   end
   #
   # View the documentation for the provider you are using for more
@@ -65,6 +65,9 @@ Vagrant.configure(2) do |config|
   # config.push.define "atlas" do |push|
   #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
   # end
+
+  # provide template for apicast from local file
+  config.vm.provision "file", source: "./amp.yml", destination: "amp.yml"
 
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
@@ -96,9 +99,8 @@ Vagrant.configure(2) do |config|
       oc login localhost:8443 --username=developer --password=developer
 
       # install APICast
-      git clone https://github.com/3scale/3scale-amp-openshift-templates.git
       oc new-project "3scale" --display-name="gateway" --description="3scale gateway demo"
-      #oc new-app --file 3scale-amp-openshift-templates/amp/amp.yml -p WILDCARD_DOMAIN=127.0.0.1
+      oc new-app --file amp.yml -p WILDCARD_DOMAIN=127.0.0.1
 
   #   sudo apt-get update
   #   sudo apt-get install -y apache2
